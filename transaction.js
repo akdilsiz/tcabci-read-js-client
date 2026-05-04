@@ -275,6 +275,8 @@ export class Transaction {
       if (typeof parsed.chain_version !== 'undefined')
         this._chainVersion = parsed.chain_version
 
+      tx.Validate()
+
       return { transaction: tx, error: null }
     } catch (e) {
       return { transaction: null, error: e }
@@ -309,10 +311,11 @@ export class Transaction {
       tx._hash = obj.hash
       if (typeof obj.inserted_at !== 'undefined')
         tx._inserted_at = new Date(obj.inserted_at)
-      if (typeof obj.chain_name !== 'undefined')
-        this._chainName = obj.chain_name
+      if (typeof obj.chain_name !== 'undefined') tx._chainName = obj.chain_name
       if (typeof obj.chain_version !== 'undefined')
-        this._chainVersion = obj.chain_version
+        tx._chainVersion = obj.chain_version
+
+      tx.Validate()
 
       return { transaction: tx, error: null }
     } catch (e) {
