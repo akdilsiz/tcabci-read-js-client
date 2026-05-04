@@ -11,10 +11,18 @@ import {
   TRANSACTION_TYPE_NOT_VALID,
 } from './errors.js'
 import { READ_NODE_ADDRESS, READ_NODE_WS_ADDRESS } from './constants.js'
-import Message, { SUBSCRIBEMessage, UNSUBSCRIBEMessage } from './message.js'
+import Message, {
+  Block as MBlock,
+  Transaction as MTransaction,
+  SUBSCRIBEMessage,
+  UNSUBSCRIBEMessage,
+  Subscription,
+  OK,
+} from './message.js'
 import { Options } from './websocketOptions.js'
 import { TWebSocket } from './websocket.js'
 import { Transaction, TX_TYPE_LIST } from './transaction.js'
+import { Block } from './block.js'
 
 /**
  * @callback SuccessCallback
@@ -36,7 +44,9 @@ import { Transaction, TX_TYPE_LIST } from './transaction.js'
 
 /**
  * @callback ListenCallback
- * @param {*} message
+ * @param {?Block} block
+ * @param {?Transaction} transaction
+ * @param {?*} msg
  * @return void
  */
 
@@ -258,18 +268,16 @@ export default class TCaBCIClient {
       addrs.push(...newAddress)
     }
 
-    const message = new Message(
-      true,
-      SUBSCRIBEMessage,
-      addrs,
-      _signedData,
-      txTypes,
+    this._ws.send(
+      new Message({
+        isWeb: true,
+        type: SUBSCRIBEMessage,
+        addrs: addrs,
+        signedData: _signedData,
+        txTypes,
+      }).ToJSON(),
     )
-
-    this._ws.send(message.ToJSON())
-    this._setSubscribeAddresses(addrs, true)
-      ._setSubscribeSignedData(signedData)
-      ._setSubscribed(true)
+    this._setSubscribeAddresses(addrs, true)._setSubscribeSignedData(signedData)
 
     return this
   }
@@ -282,7 +290,11 @@ export default class TCaBCIClient {
       throw new Error(NOT_SUBSCRIBED)
     }
     this._ws.send(
-      new Message(true, UNSUBSCRIBEMessage, this.SubscribeAddresses).ToJSON(),
+      new Message({
+        isWeb: true,
+        type: UNSUBSCRIBEMessage,
+        addrs: this.SubscribeAddresses,
+      }).ToJSON(),
     )
     this._setSubscribed(false)
     this._setSubscribeAddresses([])
@@ -708,10 +720,6 @@ export default class TCaBCIClient {
     })
 
     this._ws.addMessageListener((message) => {
-      if (message.data === 'OK' && message.data.length < 10) {
-        return { status: message.data }
-      }
-
       this._callListenCallback(message.data)
     })
 
@@ -788,9 +796,49 @@ export default class TCaBCIClient {
   }
 
   _callListenCallback(message) {
-    const { transaction, error } = Transaction.FromJSON(message)
-    if (error) this._callErrorCallback(error)
-    else if (this._listenCb) this._listenCb(transaction)
+    let msg
+
+    const { transaction, error: e1 } = Transaction.FromJSON(message)
+    if (e1) {
+      const { message: _msg, error: e2 } = Message.FromJSON(message)
+      if (e2) {
+        this._callErrorCallback(e2)
+        return
+      }
+
+      switch (_msg.type) {
+        case MBlock:
+          msg = Block.FromObject(_msg.data)
+          if (msg.error) {
+            this._callErrorCallback(msg.error)
+            return
+          }
+
+          if (this._listenCb) this._listenCb(msg.block, null, null)
+          break
+        case MTransaction:
+          msg = Transaction.FromObject(_msg.data)
+          if (msg.error) {
+            this._callErrorCallback(msg.error)
+            return
+          }
+
+          if (this._listenCb) this._listenCb(null, msg.transaction, null)
+          break
+        case Subscription:
+          if (message.state === OK) {
+            this._setSubscribed(true)
+          } else {
+            this._setSubscribed(false)
+          }
+          break
+        default:
+          if (this._listenCb) this._listenCb(null, null, _msg)
+          break
+      }
+    } else {
+      if (this._listenCb) this._listenCb(null, transaction, null)
+    }
   }
 
   /**
