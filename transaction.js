@@ -110,6 +110,7 @@ export const TX_TYPE_MASTER = 'initial_storage',
     TX_TYPE_COLLECTION,
     TX_TYPE_COLLECTION_POLICY,
     TX_TYPE_DATAV2_COLLECTION,
+    TX_TYPE_DATAV2F,
   ]
 
 export class Transaction {
