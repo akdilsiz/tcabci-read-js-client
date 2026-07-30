@@ -54,6 +54,7 @@ export const TX_TYPE_MASTER = 'initial_storage',
   TX_TYPE_COLLECTION = 'coll',
   TX_TYPE_COLLECTION_POLICY = 'coll_policy',
   TX_TYPE_DATAV2_COLLECTION = 'datav2_coll',
+  TX_TYPE_DATAV2F = 'datav2F',
   TX_TYPE_LIST = [
     TX_TYPE_MASTER,
     TX_TYPE_ADDRESS,
