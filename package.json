@@ -47,12 +47,12 @@
     "esm": "^3.2.25",
     "express": "^5.2.1",
     "globals": "^16.5.0",
-    "mocha": "^11.7.6",
+    "mocha": "^11.8.0",
     "nyc": "^17.1.0",
-    "oxfmt": "^0.x",
-    "oxlint": "^1.x",
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.78.0",
     "unit.js": "^2.1.1",
-    "ws": "^8.21.1"
+    "ws": "^8.21.3"
   },
-  "packageManager": "pnpm@11.18.0"
+  "packageManager": "pnpm@11.21.0"
 }
