@@ -7,14 +7,14 @@ import { createServer } from 'node:http'
 import { WebSocketServer } from 'ws'
 
 const waiter = (timeout = 100) => {
-  return new Promise((resolve) => setTimeout(resolve, timeout))
+  return new Promise(resolve => setTimeout(resolve, timeout))
 }
 
 let server,
   serverTwo,
   ws,
   wsTwo,
-  sendMessage = (msg) => {
+  sendMessage = msg => {
     ws.send(msg)
   },
   cameMessage = null
@@ -314,7 +314,7 @@ describe('WebSocket', () => {
     options.setDebug(true)
 
     let came = null,
-      messageCb = (msg) => {
+      messageCb = msg => {
         came = msg.data
       }
 
@@ -390,7 +390,7 @@ describe('WebSocket', () => {
     options.setDebug(true)
 
     let came = null,
-      errorCb = (e) => {
+      errorCb = e => {
         came = e.error.code
       }
 
@@ -469,7 +469,7 @@ describe('WebSocket', () => {
     options.setDebug(true)
 
     let came = null,
-      closeCb = (e) => {
+      closeCb = e => {
         came = e
       }
 
@@ -518,7 +518,7 @@ describe('WebSocket', () => {
     options.setDebug(true)
 
     let came = false,
-      closeCb = (e) => {
+      closeCb = e => {
         came = true
       }
 

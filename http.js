@@ -1,5 +1,6 @@
 import { ERR_NETWORK, FetchError, INVALID_ARGUMENTS } from './errors.js'
 import { Breaker } from './breaker.js'
+import { Debug } from '@streetbyters/js-debug'
 
 export class HTTP {
   _baseURL
@@ -20,7 +21,7 @@ export class HTTP {
   async request(uri, req) {
     req.cache = 'no-cache'
     req.headers = {
-      Client: `tcabaci-read-js-client/${this._version}`,
+      Client: `tcabaci-read-js-client/${this._version}`
     }
     req.priority = 'high'
 
@@ -28,7 +29,7 @@ export class HTTP {
       .execute(() => {
         return fetch(this._baseURL + uri, req)
       })
-      .then((response) => this.handleResponse(response))
+      .then(response => this.handleResponse(response))
   }
 
   /**
@@ -46,11 +47,12 @@ export class HTTP {
       return Promise.reject(
         new FetchError(data.message)
           .setStatus(response.status)
-          .setResponse(data),
+          .setResponse(data)
       )
     } catch (e) {
+      Debug.error(e)
       return Promise.reject(
-        new FetchError(response.statusText).setOriginError(e),
+        new FetchError(response.statusText).setOriginError(e)
       )
     }
   }

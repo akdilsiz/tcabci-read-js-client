@@ -4,7 +4,7 @@ import {
   DefaultTimeout,
   HTTPPort,
   HTTPSPort,
-  Options,
+  Options
 } from './websocketOptions.js'
 import WebSocket from 'ws'
 

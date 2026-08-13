@@ -5,7 +5,7 @@ export declare type MessageType = string
 export declare const SUBSCRIBEMessage: MessageType,
   UNSUBSCRIBEMessage: MessageType
 
-export declare type MType =  number
+export declare type MType = number
 
 export declare const Block: MessageType,
   Transaction: MessageType,
@@ -15,8 +15,7 @@ export declare const Block: MessageType,
 
 export declare type MState = number
 
-export declare const OK: MState,
-  FAIL: MState
+export declare const OK: MState, FAIL: MState
 
 export declare class Message {
   constructor({
@@ -24,7 +23,7 @@ export declare class Message {
     type,
     addrs,
     signedData,
-    txTypes,
+    txTypes
   }?: {
     isWeb: boolean
     type: MessageType
@@ -41,6 +40,9 @@ export declare class Message {
   get State(): MState | null
 
   static FromJSON(value: string): { message?: Message; error?: Error }
-  static FromObject(obj: Record<string, any>): { message?: Message; error?: Error }
+  static FromObject(obj: Record<string, any>): {
+    message?: Message
+    error?: Error
+  }
   ToJSON(): string
 }

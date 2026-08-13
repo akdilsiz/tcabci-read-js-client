@@ -12,7 +12,7 @@ export declare class TWebSocket {
   connect(force?: boolean): Awaited<TWebSocket>
   reconnect(code: number): Awaited<TWebSocket>
   disconnect(code: number): Awaited<TWebSocket>
-  send(message: (string|ArrayBufferLike|Blob|ArrayBufferView)): void
+  send(message: string | ArrayBufferLike | Blob | ArrayBufferView): void
   addOpenListener(callback: (event: Event) => void): TWebSocket
   removeOpenListener(callback: (event: Event) => void): TWebSocket
   addMessageListener(callback: (event: Event) => void): TWebSocket
