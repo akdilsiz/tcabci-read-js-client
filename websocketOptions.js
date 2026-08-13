@@ -1,3 +1,5 @@
+import { Debug } from '@streetbyters/js-debug'
+
 export const HTTPSPort = 443,
   HTTPPort = 80
 
@@ -13,7 +15,7 @@ export class Options {
   _protocols = []
   _customWS
   _endpoints = ['ws', 'longpoll']
-  _version = `v2.7.2`
+  _version = `v2.7.8`
 
   _maxConnectionDelay = 10000
   _minReconnectionDelay = 1000 + Math.random() * 4000
@@ -37,7 +39,7 @@ export class Options {
     timeout = DefaultTimeout,
     secure = true,
     port = HTTPSPort,
-    longpoll = false,
+    longpoll = false
   ) {
     this._host = host
     this._port = port
@@ -60,6 +62,7 @@ export class Options {
 
       return true
     } catch (e) {
+      Debug.error(e)
       throw e
     }
   }
@@ -277,8 +280,8 @@ export class Options {
       startClosed: this._startClosed,
       debug: this._debug,
       headers: {
-        Client: `tcabaci-read-js-client/${this._version}`,
-      },
+        Client: `tcabaci-read-js-client/${this._version}`
+      }
     }
   }
 }

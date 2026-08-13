@@ -1,4 +1,5 @@
 import { Transaction } from './transaction.js'
+import { Debug } from '@streetbyters/js-debug'
 
 export class Block {
   _height
@@ -55,7 +56,7 @@ export class Block {
       if (typeof parsed.transactions !== 'undefined') {
         for (let i = 0; i < parsed.transactions.length; i++) {
           const { transaction, error } = Transaction.FromObject(
-            parsed.transactions[i],
+            parsed.transactions[i]
           )
           if (error) {
             return { block: null, error: error }
@@ -67,6 +68,7 @@ export class Block {
 
       return { block: bl, error: null }
     } catch (e) {
+      Debug.error(e)
       return { block: null, error: e }
     }
   }
@@ -92,7 +94,7 @@ export class Block {
       if (typeof obj.transactions !== 'undefined') {
         for (let i = 0; i < obj.transactions.length; i++) {
           const { transaction, error } = Transaction.FromObject(
-            obj.transactions[i],
+            obj.transactions[i]
           )
           if (error) {
             return { block: null, error: error }
@@ -104,6 +106,7 @@ export class Block {
 
       return { block: bl, error: null }
     } catch (e) {
+      Debug.error(e)
       return { block: null, error: e }
     }
   }

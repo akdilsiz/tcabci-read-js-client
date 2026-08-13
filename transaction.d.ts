@@ -54,7 +54,7 @@ export declare const TX_TYPE_MASTER: TXType,
   TX_TYPE_COLLECTION: TXType,
   TX_TYPE_COLLECTION_POLICY: TXType,
   TX_TYPE_DATAV2_COLLECTION: TXType,
-  TX_TYPE_DATAV2F: TXType;
+  TX_TYPE_DATAV2F: TXType
 
 export declare const TX_TYPE_LIST: TXType[]
 
@@ -74,7 +74,7 @@ export declare class Transaction {
     additionalData,
     cipherData,
     chainName,
-    chainVersion,
+    chainVersion
   }?: Record<string, any>)
   get Order(): number
   get ID(): string

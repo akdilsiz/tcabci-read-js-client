@@ -1,3 +1,5 @@
+import { Debug } from '@streetbyters/js-debug'
+
 export function fromJSON(data) {
   return JSON.parse(data)
 }
@@ -5,7 +7,8 @@ export function fromJSON(data) {
 export function isJSON(str) {
   try {
     JSON.parse(str)
-  } catch (_e) {
+  } catch (e) {
+    Debug.error(e)
     return false
   }
 

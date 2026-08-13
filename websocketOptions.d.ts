@@ -10,7 +10,7 @@ export declare class Options {
     timeout: Timeout,
     secure: boolean,
     port: Port,
-    longpoll: boolean,
+    longpoll: boolean
   )
   check(): boolean
   isLongPool(): boolean

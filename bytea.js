@@ -9,7 +9,7 @@ export class Bytea {
   ToJSON() {
     return JSON.stringify({
       bytes: this.#bytes,
-      status: this.#status,
+      status: this.#status
     })
   }
 }

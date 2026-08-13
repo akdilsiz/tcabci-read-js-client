@@ -6,7 +6,7 @@ import {
   NOT_CONNECTED,
   NOT_SUBSCRIBED,
   TRANSACTION_NOT_BROADCAST,
-  TRANSACTION_TYPE_NOT_VALID,
+  TRANSACTION_TYPE_NOT_VALID
 } from './errors.js'
 import { READ_NODE_ADDRESS, READ_NODE_WS_ADDRESS } from './constants.js'
 import Message, {
@@ -15,7 +15,7 @@ import Message, {
   SUBSCRIBEMessage,
   UNSUBSCRIBEMessage,
   Subscription,
-  OK,
+  OK
 } from './message.js'
 import { Options } from './websocketOptions.js'
 import { TWebSocket } from './websocket.js'
@@ -57,7 +57,7 @@ export default class TCaBCIClient {
   _connected = false
   _chainName = 'transferchain'
   _chainVersion = 'v1'
-  _version = `v2.7.2`
+  _version = `v2.7.8`
   /**
    * @type {?SuccessCallback}
    */
@@ -97,7 +97,7 @@ export default class TCaBCIClient {
     readNodeAddresses = [],
     wsLibrary,
     chainName = null,
-    chainVersion = null,
+    chainVersion = null
   ) {
     if (!wsLibrary) throw new Error(INVALID_ARGUMENTS)
     this._wsLibrary = wsLibrary
@@ -221,7 +221,7 @@ export default class TCaBCIClient {
       chain_name: this._chainName,
       chain_version: this._chainVersion,
       connected: this._connected,
-      subscribed: this._subscribed,
+      subscribed: this._subscribed
     }
   }
 
@@ -275,8 +275,8 @@ export default class TCaBCIClient {
         type: SUBSCRIBEMessage,
         addrs: addrs,
         signedData: _signedData,
-        txTypes,
-      }).ToJSON(),
+        txTypes
+      }).ToJSON()
     )
     this._setSubscribeAddresses(addrs, true)._setSubscribeSignedData(signedData)
 
@@ -294,8 +294,8 @@ export default class TCaBCIClient {
       new Message({
         isWeb: true,
         type: UNSUBSCRIBEMessage,
-        addrs: this.SubscribeAddresses,
-      }).ToJSON(),
+        addrs: this.SubscribeAddresses
+      }).ToJSON()
     )
     this._setSubscribed(false)
     this._setSubscribeAddresses([])
@@ -314,10 +314,10 @@ export default class TCaBCIClient {
       .request(
         `/v1/blocks?chain_name=${chainName ?? this._chainName}&chain_version=${chainVersion ?? this._chainVersion}&limit=1&offset=0`,
         {
-          method: 'GET',
-        },
+          method: 'GET'
+        }
       )
-      .then((res) => {
+      .then(res => {
         const data = []
 
         for (const _data of res.data) {
@@ -328,7 +328,7 @@ export default class TCaBCIClient {
 
         return { blocks: data, total_count: res.total_count }
       })
-      .catch((e) => this._httpClient.handleError(e, new Error(BLOCK_NOT_FOUND)))
+      .catch(e => this._httpClient.handleError(e, new Error(BLOCK_NOT_FOUND)))
   }
 
   /**
@@ -344,15 +344,15 @@ export default class TCaBCIClient {
     return this._httpClient
       .request(`/v1/tx/${id}`, {
         method: 'GET',
-        headers: { 'X-Signature': signature },
+        headers: { 'X-Signature': signature }
       })
-      .then((res) => {
+      .then(res => {
         const { transaction, error } = Transaction.FromObject(res.data)
         if (error) return Promise.reject(error)
 
         return { tx: transaction }
       })
-      .catch((e) => this._httpClient.handleError(e))
+      .catch(e => this._httpClient.handleError(e))
   }
 
   /**
@@ -380,7 +380,7 @@ export default class TCaBCIClient {
     typ,
     types = null,
     chainName = null,
-    chainVersion = null,
+    chainVersion = null
   }) {
     if (!recipientAddrs && !senderAddrs) {
       return Promise.reject(new Error(INVALID_ARGUMENTS))
@@ -395,15 +395,15 @@ export default class TCaBCIClient {
           recipient_addrs: recipientAddrs,
           sender_addrs: senderAddrs,
           signed_addrs: signedData,
-          ...(types ? { types: types } : { typ: typ }),
-        }),
+          ...(types ? { types: types } : { typ: typ })
+        })
       })
-      .then((res) => {
+      .then(res => {
         let firstTransaction, lastTransaction
 
         if (res.data.first_transaction) {
           const { transaction, error } = Transaction.FromObject(
-            res.data.first_transaction,
+            res.data.first_transaction
           )
           if (error) return Promise.reject(error)
           firstTransaction = transaction
@@ -411,7 +411,7 @@ export default class TCaBCIClient {
 
         if (res.data.last_transaction) {
           const { transaction, error: errorTwo } = Transaction.FromObject(
-            res.data.last_transaction,
+            res.data.last_transaction
           )
           if (errorTwo) return Promise.reject(errorTwo)
           lastTransaction = transaction
@@ -424,10 +424,10 @@ export default class TCaBCIClient {
           first_transaction: firstTransaction,
           last_block_height: res.data.last_block_height,
           last_transaction: lastTransaction,
-          total_count: res.total_count,
+          total_count: res.total_count
         }
       })
-      .catch((e) => this._httpClient.handleError(e))
+      .catch(e => this._httpClient.handleError(e))
   }
 
   /**
@@ -465,7 +465,7 @@ export default class TCaBCIClient {
     orderField,
     orderBy,
     chainName = null,
-    chainVersion = null,
+    chainVersion = null
   }) {
     return this._httpClient
       .request('/v1/tx_search/p', {
@@ -484,10 +484,10 @@ export default class TCaBCIClient {
           ...(offset ? { offset: offset } : {}),
           ...(orderField ? { order_field: orderField } : {}),
           ...(orderBy ? { order_by: orderBy } : {}),
-          ...(types ? { types: types } : typ ? { typ: typ } : {}),
-        }),
+          ...(types ? { types: types } : typ ? { typ: typ } : {})
+        })
       })
-      .then((res) => {
+      .then(res => {
         const data = []
 
         for (const _data of res.data) {
@@ -498,10 +498,10 @@ export default class TCaBCIClient {
 
         return {
           txs: data,
-          total_count: res.total_count,
+          total_count: res.total_count
         }
       })
-      .catch((e) => this._httpClient.handleError(e))
+      .catch(e => this._httpClient.handleError(e))
   }
 
   /**
@@ -523,7 +523,7 @@ export default class TCaBCIClient {
     sender_addr,
     recipient_addr,
     sign,
-    fee,
+    fee
   }) {
     return this.broadcast(
       {
@@ -534,10 +534,10 @@ export default class TCaBCIClient {
         sender_addr,
         recipient_addr,
         sign,
-        fee,
+        fee
       },
       false,
-      true,
+      true
     )
   }
 
@@ -564,7 +564,7 @@ export default class TCaBCIClient {
     sender_addr,
     recipient_addr,
     sign,
-    fee,
+    fee
   }) {
     return this.broadcast(
       {
@@ -577,10 +577,10 @@ export default class TCaBCIClient {
         sender_addr,
         recipient_addr,
         sign,
-        fee,
+        fee
       },
       true,
-      false,
+      false
     )
   }
 
@@ -607,7 +607,7 @@ export default class TCaBCIClient {
     sender_addr,
     recipient_addr,
     sign,
-    fee,
+    fee
   }) {
     return this.broadcast(
       {
@@ -620,10 +620,10 @@ export default class TCaBCIClient {
         sender_addr,
         recipient_addr,
         sign,
-        fee,
+        fee
       },
       false,
-      false,
+      false
     )
   }
 
@@ -638,10 +638,10 @@ export default class TCaBCIClient {
       sender_addr,
       recipient_addr,
       sign,
-      fee,
+      fee
     },
     sync = false,
-    commit = false,
+    commit = false
   ) {
     if (!TX_TYPE_LIST.includes(type)) {
       throw new Error(TRANSACTION_TYPE_NOT_VALID)
@@ -660,16 +660,16 @@ export default class TCaBCIClient {
           sender_addr,
           recipient_addr,
           sign,
-          fee,
-        }),
+          fee
+        })
       })
-      .then((res) => {
+      .then(res => {
         return { data: res.data }
       })
-      .catch((e) =>
+      .catch(e =>
         this._httpClient.handleError(e, {
-          400: new Error(TRANSACTION_NOT_BROADCAST),
-        }),
+          400: new Error(TRANSACTION_NOT_BROADCAST)
+        })
       )
   }
 
@@ -687,7 +687,7 @@ export default class TCaBCIClient {
     signedData = {},
     maxHeight = null,
     chainName = null,
-    chainVersion = null,
+    chainVersion = null
   ) {
     return this._httpClient.request('/v1/bulk_tx', {
       method: 'POST',
@@ -696,8 +696,8 @@ export default class TCaBCIClient {
         chain_version: chainVersion ?? this._chainVersion,
         addresses: addresses,
         signed_addrs: signedData,
-        ...(maxHeight ? { max_height: maxHeight } : {}),
-      }),
+        ...(maxHeight ? { max_height: maxHeight } : {})
+      })
     })
   }
 
@@ -711,7 +711,7 @@ export default class TCaBCIClient {
 
     this._ws = new TWebSocket(this._options)
 
-    this._ws.addErrorListener((e) => {
+    this._ws.addErrorListener(e => {
       this._setConnected(false)
       this._setSubscribed(false)
       this._setSubscribeAddresses([], false)
@@ -719,16 +719,16 @@ export default class TCaBCIClient {
       this._callErrorCallback(e)
     })
 
-    this._ws.addOpenListener((e) => {
+    this._ws.addOpenListener(e => {
       this._setConnected(true)
       this._callSuccessCallback(e)
     })
 
-    this._ws.addMessageListener((message) => {
+    this._ws.addMessageListener(message => {
       this._callListenCallback(message.data)
     })
 
-    this._ws.addCloseListener((e) => {
+    this._ws.addCloseListener(e => {
       this._setConnected(false)
       this._setSubscribed(false)
       this._setSubscribeAddresses([], false)

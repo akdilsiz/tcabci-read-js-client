@@ -25,18 +25,18 @@ const client = new TCaBCIClient()
 // OR
 const client = new TCaBCIClient([
   'https://read-node-01.transferchain.io',
-  'wss://read-node-01.transferchain.io/ws',
+  'wss://read-node-01.transferchain.io/ws'
 ])
 // OR
 // With addresses and WebSocket library and network name, version
 const client = new TCaBCIClient(
   [
     'https://read-node-01.transferchain.io',
-    'wss://read-node-01.transferchain.io/ws',
+    'wss://read-node-01.transferchain.io/ws'
   ],
   WebSocket,
   'transferchain',
-  'v1',
+  'v1'
 )
 
 client.Start()

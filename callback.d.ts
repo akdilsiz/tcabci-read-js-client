@@ -7,5 +7,5 @@ export declare type CloseCallback = (event: Event) => void
 export declare type ListenCallback = (
   block: Block | null,
   tx: Transaction | null,
-  msg: any | null,
+  msg: any | null
 ) => void

@@ -1,12 +1,17 @@
 import { Transaction, TXType } from './transaction'
-import { SuccessCallback, ErrorCallback, CloseCallback, ListenCallback } from './callback'
+import {
+  SuccessCallback,
+  ErrorCallback,
+  CloseCallback,
+  ListenCallback
+} from './callback'
 
 declare class TCaBCIClient {
   constructor(
     readNodeAddresses: string[],
     wsLibrary: WebSocket,
     chainName: string,
-    chainVersion: string,
+    chainVersion: string
   )
   SetDebug(debug: boolean): TCaBCIClient
   SetSuccessCallback(cb: SuccessCallback): TCaBCIClient
@@ -30,13 +35,13 @@ declare class TCaBCIClient {
   Subscribe(
     addresses: string[],
     signedData: Record<string, string>,
-    txTypes?: TXType[],
+    txTypes?: TXType[]
   ): TCaBCIClient
   Unsubscribe(): TCaBCIClient
   LastBlock(
     chainName?: null,
-    chainVersion?: null,
-  ): { blocks: Transaction[]; total_count: number }
+    chainVersion?: null
+  ): Promise<{ blocks: Transaction[]; total_count: number }>
   Tx(id: string, signature: string): Promise<{ tx: Transaction }>
   TxSummary({
     recipientAddrs,
@@ -45,7 +50,7 @@ declare class TCaBCIClient {
     typ,
     types,
     chainName,
-    chainVersion,
+    chainVersion
   }: Record<string, any>): Promise<{
     chain_name: string
     chain_version: string
@@ -71,8 +76,8 @@ declare class TCaBCIClient {
     orderField,
     orderBy,
     chainName,
-    chainVersion,
-  }): Promise<{ txs: Transaction[]; total_count: number }>
+    chainVersion
+  }: Record<string, any>): Promise<{ txs: Transaction[]; total_count: number }>
   BroadcastCommit({
     id,
     version,
@@ -83,8 +88,8 @@ declare class TCaBCIClient {
     sender_addr,
     recipient_addr,
     sign,
-    fee,
-  }): Promise<{ data: Record<string, any> }>
+    fee
+  }: Record<string, any>): Promise<{ data: Record<string, any> }>
   BroadcastSync({
     id,
     version,
@@ -95,8 +100,8 @@ declare class TCaBCIClient {
     sender_addr,
     recipient_addr,
     sign,
-    fee,
-  }): Promise<{ data: Record<string, any> }>
+    fee
+  }: Record<string, any>): Promise<{ data: Record<string, any> }>
   Broadcast({
     id,
     version,
@@ -107,14 +112,14 @@ declare class TCaBCIClient {
     sender_addr,
     recipient_addr,
     sign,
-    fee,
-  }): Promise<{ data: Record<string, any> }>
+    fee
+  }: Record<string, any>): Promise<{ data: Record<string, any> }>
   Bulk(
     addresses: string[],
     signedData: Record<string, any>,
     maxHeight?: number,
     chainName?: string,
-    chainVersion?: string,
+    chainVersion?: string
   ): Promise<{ data: Record<string, any> }>
 }
 
