@@ -41,7 +41,7 @@ declare class TCaBCIClient {
   LastBlock(
     chainName?: null,
     chainVersion?: null
-  ): { blocks: Transaction[]; total_count: number }
+  ): Promise<{ blocks: Transaction[]; total_count: number }>
   Tx(id: string, signature: string): Promise<{ tx: Transaction }>
   TxSummary({
     recipientAddrs,
@@ -77,7 +77,7 @@ declare class TCaBCIClient {
     orderBy,
     chainName,
     chainVersion
-  }): Promise<{ txs: Transaction[]; total_count: number }>
+  }: Record<string, any>): Promise<{ txs: Transaction[]; total_count: number }>
   BroadcastCommit({
     id,
     version,
@@ -89,7 +89,7 @@ declare class TCaBCIClient {
     recipient_addr,
     sign,
     fee
-  }): Promise<{ data: Record<string, any> }>
+  }: Record<string, any>): Promise<{ data: Record<string, any> }>
   BroadcastSync({
     id,
     version,
@@ -101,7 +101,7 @@ declare class TCaBCIClient {
     recipient_addr,
     sign,
     fee
-  }): Promise<{ data: Record<string, any> }>
+  }: Record<string, any>): Promise<{ data: Record<string, any> }>
   Broadcast({
     id,
     version,
@@ -113,7 +113,7 @@ declare class TCaBCIClient {
     recipient_addr,
     sign,
     fee
-  }): Promise<{ data: Record<string, any> }>
+  }: Record<string, any>): Promise<{ data: Record<string, any> }>
   Bulk(
     addresses: string[],
     signedData: Record<string, any>,
