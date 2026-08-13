@@ -1,4 +1,5 @@
 import { INVALID_ARGUMENT_WITH_CS } from './errors.js'
+import { Debug } from '@streetbyters/js-debug'
 
 export const TX_TYPE_MASTER = 'initial_storage',
   TX_TYPE_ADDRESS = 'interim_storage',
@@ -110,7 +111,7 @@ export const TX_TYPE_MASTER = 'initial_storage',
     TX_TYPE_COLLECTION,
     TX_TYPE_COLLECTION_POLICY,
     TX_TYPE_DATAV2_COLLECTION,
-    TX_TYPE_DATAV2F,
+    TX_TYPE_DATAV2F
   ]
 
 export class Transaction {
@@ -165,7 +166,7 @@ export class Transaction {
     additionalData = null,
     cipherData = null,
     chainName = null,
-    chainVersion = null,
+    chainVersion = null
   } = {}) {
     this._id = id
     this._height = height
@@ -252,7 +253,7 @@ export class Transaction {
     if (typeof value !== 'string')
       return {
         transaction: null,
-        error: new Error('invalid json payload'),
+        error: new Error('invalid json payload')
       }
 
     try {
@@ -287,6 +288,7 @@ export class Transaction {
 
       return { transaction: tx, error: null }
     } catch (e) {
+      Debug.error(e)
       return { transaction: null, error: e }
     }
   }
@@ -295,7 +297,7 @@ export class Transaction {
     if (!obj)
       return {
         transaction: null,
-        error: new Error('invalid obj payload'),
+        error: new Error('invalid obj payload')
       }
 
     try {
@@ -327,6 +329,7 @@ export class Transaction {
 
       return { transaction: tx, error: null }
     } catch (e) {
+      Debug.error(e)
       return { transaction: null, error: e }
     }
   }
@@ -357,7 +360,7 @@ export class Transaction {
         : {}),
       ...(this._cipherData ? { cipher_data: this._cipherData } : {}),
       ...(this._chainName ? { chain_name: this._chainName } : {}),
-      ...(this._chainVersion ? { chain_version: this._chainVersion } : {}),
+      ...(this._chainVersion ? { chain_version: this._chainVersion } : {})
     })
   }
 
@@ -387,7 +390,7 @@ export class Transaction {
         : {}),
       ...(this._cipherData ? { cipher_data: this._cipherData } : {}),
       ...(this._chainName ? { chain_name: this._chainName } : {}),
-      ...(this._chainVersion ? { chain_version: this._chainVersion } : {}),
+      ...(this._chainVersion ? { chain_version: this._chainVersion } : {})
     }
   }
 

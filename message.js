@@ -1,5 +1,6 @@
 import { INVALID_ARGUMENT_WITH_CS } from './errors.js'
 import { TX_TYPE_LIST } from './transaction.js'
+import { Debug } from '@streetbyters/js-debug'
 
 export const SUBSCRIBEMessage = 'subscribe',
   UNSUBSCRIBEMessage = 'unsubscribe'
@@ -36,7 +37,7 @@ export default class Message {
     addrs,
     signedData = null,
     txTypes = null,
-    data = null,
+    data = null
   } = {}) {
     this._is_web = isWeb
     this._type = type
@@ -88,6 +89,7 @@ export default class Message {
 
       return { message: this, error: null }
     } catch (e) {
+      Debug.error(e)
       return { message: null, error: e }
     }
   }
@@ -108,6 +110,7 @@ export default class Message {
 
       return { message: this, error: null }
     } catch (e) {
+      Debug.error(e)
       return { message: null, error: e }
     }
   }
@@ -123,7 +126,7 @@ export default class Message {
         ? { signed_addresses: this._signedAddresses }
         : {}),
       ...(this._txTypes ? { tx_types: this._txTypes } : {}),
-      ...(this._data ? { data: this._data } : {}),
+      ...(this._data ? { data: this._data } : {})
     })
   }
 

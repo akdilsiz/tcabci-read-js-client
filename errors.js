@@ -2,7 +2,7 @@ export const ALREADY_CONNECTED = 'Already connected',
   NOT_CONNECTED = 'Not connected',
   ERR_NETWORK = 'Network Error',
   INVALID_ARGUMENTS = 'Check your arguments',
-  INVALID_ARGUMENT_WITH_CS = (val) => {
+  INVALID_ARGUMENT_WITH_CS = val => {
     return INVALID_ARGUMENTS + ' ' + val
   },
   NOT_SUBSCRIBED = 'Not subscribed',

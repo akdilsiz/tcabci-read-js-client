@@ -197,7 +197,7 @@ export class TWebSocket {
     if (this[name].length >= MaxListenerSize)
       throw new Error(`listener size must be ${MaxListenerSize}`)
 
-    if (this[name].findIndex((v) => v === callback) > -1) return this
+    if (this[name].findIndex(v => v === callback) > -1) return this
 
     this[name].push(callback)
 
@@ -210,7 +210,7 @@ export class TWebSocket {
    * @private
    */
   _removeListener(name, callback) {
-    const idx = this[name].findIndex((v) => v === callback)
+    const idx = this[name].findIndex(v => v === callback)
 
     if (idx > -1) {
       this[name].splice(idx, 1)
@@ -229,7 +229,7 @@ export class TWebSocket {
         },
         0,
         callback,
-        value,
+        value
       )
     }
   }
@@ -258,30 +258,30 @@ export class TWebSocket {
     this._client = new ReconnectingWebSocket(
       this._options.url,
       this._options.protocols,
-      this._options.make(),
+      this._options.make()
     )
 
-    this._openListener = (e) => {
+    this._openListener = e => {
       this._connectionErrorCount = 0
       this._onOpen(e)
     }
     this._client.addEventListener('open', this._openListener)
 
-    this._closeListener = (e) => {
+    this._closeListener = e => {
       this._onClose(e)
     }
     this._client.addEventListener('close', this._closeListener)
 
-    this._messageListener = (e) => {
+    this._messageListener = e => {
       this._onMessage(e)
     }
     this._client.addEventListener('message', this._messageListener)
 
-    this._errorListener = (e) => {
+    this._errorListener = e => {
       this._onError(e)
       if (this._connectionErrorCount > 15) {
         this._onError(new Error('Internet connectivity problem!'))
-        this._disconnect().catch((err) => {
+        this._disconnect().catch(err => {
           this._onError(err)
         })
 
